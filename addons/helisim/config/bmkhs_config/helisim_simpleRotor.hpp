@@ -22,6 +22,8 @@
 //  mastLength   - m along the disc's own up axis, from pivot to hub
 //  gearRatio    - rotor to engine shaft; shared with the transmission model
 //  torqueTau    - s, torque filter time constant
+//  damageRole   - the hitpoint role that destroys this rotor. A rotor that declares none
+//                 cannot be destroyed.
 //
 //  BLADE
 //  bladeRadius  - m
@@ -58,6 +60,7 @@
         class SimpleRotor01 {
             type             = "main";
             direction        = "cw";
+            damageRole       = "mainRotor";
             numBlades        = 4;
             pivot[]          = {0.00, 1.56, 1.27};
             rotation[]       = {0.00, 0.00, 0.00};
@@ -117,6 +120,7 @@
         class SimpleRotor02 {
             type             = "tail";
             direction        = "cw";
+            damageRole       = "tailRotor";
             numBlades        = 3;
             pivot[]          = {0.00, -6.577, 1.225};
             rotation[]       = {0.00, -90.00,  0.000};
