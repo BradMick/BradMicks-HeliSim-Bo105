@@ -10,3 +10,8 @@
 
 Load all three in game. This pack loads after HeliSim and after Global Mobilization's Bo 105.
 Every Bo 105 variant inherits from `gm_bo105_base`, so all of them fly this model.
+
+## Flight model
+
+How every value was derived, and the commands that regenerate it: [docs/BO105_FM.md](docs/BO105_FM.md).
+Tools in [tools/](tools/).

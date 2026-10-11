@@ -1,8 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Fuel //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
-//TODO(BO105): the EC665 Tiger's two tanks as a placeholder - tanks, arms and capacities from
-//the Bo 105.
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Fuel tanks ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,33 +13,30 @@
 //  removable - 1 if the tank can be taken out; 0 is always fitted
 //  role      - "main" (an engine can draw from it) or "xfer" (feeds the mains only)
 
-    //CROSSFEED positions - which tank each engine feeds from in each valve position, by
-    //tank variableName. The first entry is the default.
-    numCrossfeedModes = 3;
+    //Both engines draw from the supply tank. The main tank tops it up - fn_setup sets the
+    //XFER pump to SUPPLY.
+    numCrossfeedModes = 1;
     class CrossfeedModes {
-        class Norm { position = "NORM"; engSources[] = {"fwdTank", "aftTank"}; };
-        class Fwd  { position = "FWD";  engSources[] = {"fwdTank", "fwdTank"}; };
-        class Aft  { position = "AFT";  engSources[] = {"aftTank", "aftTank"}; };
+        class Norm { position = "NORM"; engSources[] = {"supplyTank", "supplyTank"}; };
     };
 
-    //XFER pump destinations, in main order.
-    xferDestinations[] = {"FWD", "AFT"};
+    xferDestinations[] = {"SUPPLY", "MAIN"};
 
     numFuelTanks = 2;
     class FuelTanks {
         class FuelTank01 {
-            variableName = "fwdTank";
-            arm[]     = {0.000, 1.900, 0.000};
-            capacity  = 590.0;
-            lowFuelKg = 92.0;
+            variableName = "supplyTank";
+            arm[]     = {0.000, 3.170, 0.000};
+            capacity  = 74.0;
+            lowFuelKg = 74.0;
             removable = 0;
             role      = "main";
         };
         class FuelTank02 {
-            variableName = "aftTank";
-            arm[]     = {0.000, 1.200, 0.000};
-            capacity  = 575.0;
-            lowFuelKg = 92.0;
+            variableName = "mainTank";
+            arm[]     = {0.000, 2.210, 0.000};
+            capacity  = 382.0;
+            lowFuelKg = 0.0;
             removable = 0;
             role      = "main";
         };

@@ -6,8 +6,7 @@
     /////////////////////////////////////////////////////////////////////////////////////////////
     //numEngines is declared at the top of bmkhs_bo105_config.hpp, beside useSystems - it is
     //the airframe's count, not an engine's property. No hitpoints here, so it IS the count.
-    //TODO(BO105): the EC665 Tiger's MTR390 as a placeholder. Replace with the Bo 105's Allison
-    //250-C20B and build its compressor map - AIRCRAFT_GUIDE.md, Step 3, "The engines".
+    //Allison 250-C20B. TODO(BO105): starter and spool values are the Tiger's.
     class Engines {
         class Engine01 {
             name            = "eng01";
@@ -16,29 +15,29 @@
 
             //Whole-assembly properties - not owned by any one section.
             engineType  = "turboShaftEngine";   //dispatches to bmkhs_fnc_turboShaftEngine
-            designRpm   = 8000;                 //100% Np, the shaft reference
+            designRpm   = 6000;                 //100% Np, the shaft reference
             npFly       = 1.00;                 //governed Np in FLY, as a fraction of designRpm
-            maxFuelFlow = 0.033;                //kg/s per unit of fuel - the gauge boundary
-            powerKw     = 957;                  //100% torque, 1143 Nm at 8000 rpm - the torque reference, refTq
+            maxFuelFlow = 0.0161;               //kg/s per unit of fuel - the gauge boundary
+            powerKw     = 313;                  //100% torque - the torque reference, refTq
 
             //Hard shutdowns - both CUT FUEL rather than restricting it.
             maxNg = 1.10;                       //mechanical fly weights
             maxNp = 1.175;                      //engine overspeed
 
             //Engine Limits
-            oilPsiLimits[] = {0.203, 1.015};
+            oilPsiLimits[] = {0.385, 1.000};    //3.5 / 9.1 kp/cm2
             ngMin          = 0.63;
-            ngLimits[]     = {{1.022, 12, 10}, {1.051, 0, 20}};
-            npLimits[]     = {{1.057, 30, 10}, {1.121, 0, 20}};
-            tqLimits[]     = {{0.94, 300, 5}, {1.006, 0, 10}};
-            tgtLimits[]    = {{894, 300, 1000}, {928, 0, 2000}};
-            tqLimitsSe[]   = {{0.94, 1800, 10}, {1.006, 150, 2}, {1.085, 30, 2}, {1.339, 0, 4}};
-            tgtLimitsSe[]  = {{894, 1800, 1000}, {928, 150, 0}, {962, 30, 0}, {1036, 0, 2000}};
+            ngLimits[]     = {{1.05, 15, 10}, {1.06, 0, 20}};
+            npLimits[]     = {{1.02, 15, 10}, {1.05, 0, 20}};
+            tqLimits[]     = {{0.86, 0, 5}};
+            tgtLimits[]    = {{779, 300, 1000}, {810, 6, 2000}, {843, 0, 2000}};
+            tqLimitsSe[]   = {{0.95, 0, 5}};
+            tgtLimitsSe[]  = {{779, 1800, 1000}, {810, 6, 2000}, {843, 0, 2000}};
 
             //Compressor - stations 2 -> 3.
             class Compressor {
-                pressureRatio = 13.0;    //at Ng 1.0
-                massFlow      = 3.2;     //kg/s at Ng 1.0, standard day
+                pressureRatio = 7.2;     //at Ng 1.0
+                massFlow      = 1.56;    //kg/s at Ng 1.0, standard day
                 inletDiameter = 0.396;   //m - for inlet losses, not yet modelled
                 ramRecovery   = 1.0;     //share of the ram pressure rise the inlet keeps
 
@@ -46,45 +45,44 @@
                 compDrag      = 3.4;     //as compDrag * ng^2
                 compDragFloor = 0.10;    //finishes the stop - ng^2 alone only asymptotes
 
-                //Airflow trim by FAT, {FAT, multiplier} - dials the engine onto its charts.
+                //Airflow trim by FAT, {FAT, multiplier} - the OGE chart's engine-limited cells. 15 C held.
                 airflowTable[] = {
-                     {-40, 1.0230}
-                    ,{-30, 0.9700}
-                    ,{-20, 0.9170}
-                    ,{-10, 0.9770}
-                    ,{  0, 1.0377}
-                    ,{ 10, 1.0126}
+                     {-40, 1.1400}
+                    ,{-30, 1.0930}
+                    ,{-20, 1.0460}
+                    ,{-10, 1.0090}
+                    ,{  0, 0.9710}
+                    ,{ 10, 0.9900}
                     ,{ 15, 1.0000}
-                    ,{ 20, 1.0567}
-                    ,{ 30, 1.1028}
-                    ,{ 40, 1.1488}
+                    ,{ 20, 1.1360}
+                    ,{ 30, 1.2120}
+                    ,{ 40, 1.2880}
                 };
 
-                //Compressor map - the MTR390's own, replacing Core's T700-701C default.
+                //Compressor map - compressor_map.py: MCP 15 C 0.950 779 0.86, TOP 15 C 0.968 810 0.95.
                 compressorMap[] = {
-                     {0.0000, 0.0588, 0.0000, 0.544, 0.4335}
-                    ,{0.0500, 0.0595, 0.0116, 0.544, 0.4335}
-                    ,{0.1000, 0.0618, 0.0329, 0.544, 0.4335}
-                    ,{0.1500, 0.0656, 0.0604, 0.544, 0.4335}
-                    ,{0.2000, 0.0712, 0.0930, 0.544, 0.4335}
-                    ,{0.2500, 0.0789, 0.1300, 0.544, 0.4335}
-                    ,{0.3000, 0.0891, 0.1709, 0.544, 0.4335}
-                    ,{0.3500, 0.1024, 0.2153, 0.544, 0.4335}
-                    ,{0.4000, 0.1194, 0.2631, 0.544, 0.4335}
-                    ,{0.4500, 0.1410, 0.3139, 0.544, 0.4335}
-                    ,{0.5000, 0.1683, 0.3676, 0.544, 0.4335}
-                    ,{0.5500, 0.2026, 0.4241, 0.544, 0.4335}
-                    ,{0.6000, 0.2456, 0.4833, 0.544, 0.4335}
-                    ,{0.6173, 0.2629, 0.5043, 0.544, 0.4335}
-                    ,{0.6768, 0.3329, 0.5891, 0.595, 0.4462}
-                    ,{0.7546, 0.4559, 0.7130, 0.642, 0.4686}
-                    ,{0.8125, 0.5971, 0.8152, 0.657, 0.5028}
-                    ,{0.8790, 0.8651, 1.0310, 0.650, 0.5061}
-                    ,{0.8957, 0.9383, 1.0225, 0.651, 0.5130}
-                    ,{0.9133, 1.0155, 1.0261, 0.653, 0.5194}
-                    ,{0.9392, 1.1291, 1.1114, 0.655, 0.5174}
-                    ,{0.9500, 1.1766, 1.1471, 0.656, 0.5165}
-                    ,{1.0000, 1.3959, 1.3116, 0.659, 0.5126}
+                     {0.0000, 0.0588, 0.0000, 0.544, 0.2924}
+                    ,{0.0500, 0.0595, 0.0116, 0.544, 0.2924}
+                    ,{0.1000, 0.0618, 0.0329, 0.544, 0.2924}
+                    ,{0.1500, 0.0656, 0.0604, 0.544, 0.2924}
+                    ,{0.2000, 0.0712, 0.0930, 0.544, 0.2924}
+                    ,{0.2500, 0.0789, 0.1300, 0.544, 0.2924}
+                    ,{0.3000, 0.0891, 0.1709, 0.544, 0.2924}
+                    ,{0.3500, 0.1024, 0.2153, 0.544, 0.2924}
+                    ,{0.4000, 0.1194, 0.2631, 0.544, 0.2924}
+                    ,{0.4500, 0.1410, 0.3139, 0.544, 0.2924}
+                    ,{0.5000, 0.1683, 0.3676, 0.544, 0.2924}
+                    ,{0.5500, 0.2026, 0.4241, 0.544, 0.2924}
+                    ,{0.6000, 0.2456, 0.4833, 0.544, 0.2924}
+                    ,{0.6173, 0.2629, 0.5043, 0.544, 0.2924}
+                    ,{0.6768, 0.3329, 0.5891, 0.595, 0.3459}
+                    ,{0.7546, 0.4559, 0.7130, 0.642, 0.4067}
+                    ,{0.8125, 0.5971, 0.8152, 0.657, 0.4649}
+                    ,{0.8636, 0.7925, 0.9502, 0.655, 0.4997}
+                    ,{0.8800, 0.8694, 0.9595, 0.650, 0.5201}
+                    ,{0.9167, 1.0306, 0.9804, 0.653, 0.5658}
+                    ,{0.9500, 1.1766, 0.9993, 0.656, 0.6074}
+                    ,{1.0000, 1.3959, 1.0278, 0.659, 0.6697}
                 };
 
                 //Start thresholds - discrete events the model branches on.
@@ -95,9 +93,9 @@
                 idleNg     = 0.679;
 
                 //Ng limiter - ngLimitMax min (ngLimitBase + ngLimitSlope * FAT).
-                ngLimitMax   = 1.022;
-                ngLimitBase  = 1.01436;
-                ngLimitSlope = 0.0019091;
+                ngLimitMax   = 1.05;
+                ngLimitBase  = 1.05;
+                ngLimitSlope = 0.0;
             };
 
             //Combustor - stations 3 -> 4.
@@ -105,9 +103,9 @@
                 fuelLhv             = 43000;    //kJ/kg - JP-8
                 combustorEfficiency = 0.99;
 
-                maxTgt      = 1036;      //deg C - TGT limiter, twin engine
-                maxTgtSe    = 1036;      //deg C - TGT limiter, single engine
-                startTgt    = 750;       //deg C - the transient START limit, not the peak
+                maxTgt      = 843;       //deg C - TGT limiter, twin engine
+                maxTgtSe    = 843;       //deg C - TGT limiter, single engine
+                startTgt    = 927;       //deg C - the transient START limit, not the peak
                 startMinTgt = 80;        //deg C - below this before the power lever is moved
 
                 //How violently an un-purged engine runs away, latched from TGT at the lever.
@@ -131,7 +129,7 @@
             //The ECU - what it schedules, and the ceilings it will not pass.
             class Governor {
                 //Minimum fuel the power lever schedules.
-                fuelIdle = 0.539;        //settles Ng at 0.679
+                fuelIdle = 0.521;        //settles Ng at 0.679
                 fuelFly  = 3.136;        //WIDE OPEN - the governor cuts back from here
 
                 //Fuel metered at light-off as a fraction of idle fuel. Sets the start PEAK.

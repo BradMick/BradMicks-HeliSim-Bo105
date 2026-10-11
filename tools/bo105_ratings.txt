@@ -1,0 +1,3 @@
+#name  FAT_C  N1     T45_C  torque
+MCP    15     0.950  779    0.860
+TOP    15     0.968  810    0.950

@@ -18,3 +18,6 @@ if (_heli getVariable ["bmkhs_initialised", false]) exitWith {};
 
 [_heli] call bmkhs_fnc_coreInit;
 [_heli, configOf _heli >> "BMKHS_HeliSim"] call bmkhs_fnc_coreConfig;
+
+//The main tank keeps the supply tank full.
+_heli setVariable ["bmkhs_xferMode", "SUPPLY"];
