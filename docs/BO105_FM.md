@@ -55,19 +55,15 @@ The offset was found in game with the nudge (section 3), not measured.
 `addons/helisim/fm.p3d` is the source of `helisim_fuselage.hpp` and `helisim_wings.hpp`, built
 as Core's guide describes ("The fuselage and wings - model them, do not type them").
 
-Core's generator writes coordinates exactly as they are in the p3d, and Core does not rotate
-them. Because fm.p3d is in the source model frame, the pack wraps Core's generator:
+fm.p3d is in the source model frame, so Core's generator places it as it reads it - turned
+180 deg, then shifted (its `--turn`, `--forward`, `--down`, `--right` and `--add`, Core's
+guide step 3 section 5). From HeliSim Core's `python/`:
 
-    python tools/fm_generate_bo105.py --add
+    python tools\fm_generateAeroSurfacePoints.py C:\GitHub\BradMicks-HeliSim-Bo105\addons\helisim\fm.p3d C:\GitHub\BradMicks-HeliSim-Bo105\addons\helisim\config\bmkhs_config --turn --forward 0.300 --down 0.650
 
-`tools/fm_generate_bo105.py` runs Core's `fm_generateAeroSurfacePoints.py` (expected at
-`../BradMicks-HeliSim-Core`, or `--core PATH`) with the 180 deg turn and the shift applied to
-every point as it is read. Options:
-
-| Option | Effect |
-|---|---|
-| `--forward M` `--down M` `--right M` | Shift, metres |
-| `--add` | Add to the shift recorded in line 2 of the current `helisim_fuselage.hpp` instead of replacing it. Use this after any regeneration - the current shift is forward 0.300, down 0.650. |
+The current files record their placement in the old wrapper's format, which Core's `--add` does
+not read - so the next regeneration gives the full placement above. After that, `--add` adds to
+it.
 
 It rewrites **both** files in full. After every regeneration:
 
@@ -89,27 +85,9 @@ The horizontal stabilizer is modelled facing **down** (lift downward, holding th
 
 ## 3. Tuning positions in game - the nudge
 
-`tools/fm_nudge.sqf` moves the aerosurfaces, each rotor hub and the centre of mass live, because
-Core reads all of them from the vehicle every frame. With **Enable FM Debugging** on, paste it
-into the debug console and LOCAL EXEC.
-
-| Key | Does |
-|---|---|
-| Numpad 0 | Next target: fuselage + wings, each simple rotor, centre of mass |
-| Numpad 8 / 2 | Forward / aft |
-| Numpad 6 / 4 | Right / left |
-| Numpad 9 / 3 | Up / down |
-| Numpad + / - | Double / halve the step (starts at 0.05 m) |
-| Numpad 5 | Copy the result for the current target |
-
-What Numpad 5 copies, each line labelled with where it goes:
-
-- **Fuselage + wings** - a `fm_generate_bo105.py --add` command to run at the repo root.
-- **A rotor** - its `pivot[]` line for `helisim_simpleRotor.hpp`.
-- **Centre of mass** - `comCorrection[]` (REALISTIC) or `casualModeCom[]` (other modes) for
-  `helisim_mass.hpp`.
-
-It counts from what is loaded. Re-enter the aircraft before pasting it again.
+HeliSim Core's `tools/fm_nudge.sqf` moves the aerosurfaces, each rotor hub and the centre of
+mass live. Its keys and what it copies are in Core's guide, step 3 section 7. For fuselage +
+wings it copies Core's generator `--add` command (section 2 above).
 
 ---
 
@@ -117,8 +95,8 @@ It counts from what is loaded. Re-enter the aircraft before pasting it again.
 
 GM's config is encrypted on disk, so it is read in game.
 
-**`tools/gm_bo105_dump.sqf`** - every variant's turrets, weapons, magazines, pylons and
-animation sources, to the RPT (`BO105DUMP|`) and the clipboard. Results:
+**HeliSim Core's `tools/dump.sqf`**, run sitting in a Bo 105 - every variant's turrets, weapons,
+magazines, pylons and animation sources, to the RPT (`BMKHSDUMP|`) and the clipboard. Results:
 
 | Variant | Class (parent `<class>_base`) | Seats |
 |---|---|---|
@@ -134,9 +112,9 @@ animation sources, to the RPT (`BO105DUMP|`) and the clipboard. Results:
 - The only equipment-like animation sources are the Swooper's `swooperBenches_unhide` and
   `swooperRopes_unhide`.
 
-**`tools/gm_bo105_seats.sqf`** - puts a temporary soldier in every empty seat, logs each seat's
-and pylon's position in the model frame (the seat at the occupant's pelvis), then removes them.
-RPT (`BO105SEATS|`) and clipboard. It waits for game time, so **close the pause menu** after
+**HeliSim Core's `tools/seats.sqf`** - puts a temporary soldier in every empty seat, logs each
+seat's and pylon's position in the model frame (the seat at the occupant's pelvis), then removes
+them. RPT (`BMKHSSEATS|`) and clipboard. It waits for game time, so **close the pause menu** after
 running it. Results are in section 6.
 
 ---
@@ -189,7 +167,7 @@ forward limit once the masses were real.
 **`casualModeCom = {0.000, 0.810, 0.975}`** (Arma frame), the Tiger's pattern: y under the main
 rotor hub (its pivot y), z at the tail rotor's height (its pivot z), so pedal makes no roll.
 
-**Seats** - measured with `gm_bo105_seats.sqf`, 100 kg each:
+**Seats** - measured with the seat tool (now HeliSim Core's `tools/seats.sqf`), 100 kg each:
 
 | Seat | Turret | arm[] |
 |---|---|---|
@@ -441,10 +419,10 @@ stretching the airflow to 1.48x in the rating rows while the rows below stay on 
 
 The Tiger's method: trim `airflowTable` per FAT so the OGE chart's engine-limited cells fall on
 the rotor, with 15 C held at 1.0 (a standard day is the untrimmed engine, and keeps MCP at 86%
-and 779 C). `tools/bo105_airflow_trim.py`, from HeliSim Core's `python/dev` with
-`BMKHS_CONFIG` set:
+and 779 C). HeliSim Core's `python/dev/airflow_trim.py`, with the chart in
+`tools/bo105_oge_chart.txt` and `BMKHS_CONFIG` set to this pack's `bmkhs_config`, from Core's root:
 
-    python C:\GitHub\BradMicks-HeliSim-Bo105\tools\bo105_airflow_trim.py . solve
+    python python/dev/airflow_trim.py solve --chart C:\GitHub\BradMicks-HeliSim-Bo105\tools\bo105_oge_chart.txt --tot 810 --rotor-tq 0.855 --bc 0 1.248 -0.108 --cg 0 1.096 -0.218
 
 For every chart cell under 2,500 kg it trims the rotor rig in an OGE hover at that weight, PA
 and FAT (the torque **needed**), and flies the engine rig to its limit with the TOT limiter at
@@ -462,7 +440,7 @@ and is skipped; the rest give `needed / delivered`.
 
 -30, -10 and 10 C are interpolated. Check a table by flying every cell with it:
 
-    python ...\bo105_airflow_trim.py . check table.json
+    python python/dev/airflow_trim.py check table.json --chart ... (the same options)
 
 where `table.json` is `[[-40,1.140],[-30,1.093],...]`. Every engine-limited cell lands within
 1.5% of the rotor's need.
