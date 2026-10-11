@@ -9,7 +9,7 @@ author = "BradMick"
 major = 0
 minor = 1
 patch = 0
-build = 0
+build = 1
 git_hash = 0
 
 [files]
