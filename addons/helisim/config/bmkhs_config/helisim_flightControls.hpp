@@ -16,16 +16,16 @@
     class FMC {
         class Sas {
             gate[]      = {};
-            pitch[]     = {0.0026, 0.0000, 0.000035, 0.00};
-            roll[]      = {0.0017, 0.0000, 0.000035, 0.00};
+            pitch[]     = {0.0044, 0.0000, 0.000060, 0.00};    //pitch x1.7, roll x1.4 - restore after the lift coef cuts
+            roll[]      = {0.0024, 0.0000, 0.000049, 0.00};
             yaw[]       = {0.0026, 0.00044, 0.00010, 0.001276};
         };
         class AttitudeHold {
             gate[]      = {};
-            posPitch[]  = {0.077, 0.0036, 0.062, 0.1};     //position / velocity hold
-            posRoll[]   = {0.028, 0.0036, 0.046, 0.1};
-            attPitch[]  = {0.0925, 0.0025, 0.0450, 0.1};
-            attRoll[]   = {0.0400, 0.0015, 0.0180, 0.1};
+            posPitch[]  = {0.131, 0.0061, 0.105, 0.1};     //position / velocity hold
+            posRoll[]   = {0.039, 0.0050, 0.064, 0.1};
+            attPitch[]  = {0.157, 0.0043, 0.0765, 0.1};
+            attRoll[]   = {0.056, 0.0021, 0.0252, 0.1};
         };
         class AltitudeHold {
             gate[]      = {};
@@ -44,6 +44,6 @@
     //Auto-pedal
     pidAutoAttPitch[]   = {0.0925, 0.0025, 0.0220, 0.1};
     pidAutoAttRoll[]    = {0.0400, 0.0015, 0.0250, 0.1};
-    pidAutoPedalHdg[]   = {0.0500, 0.0025, 0.0125, 0.075};
-    pidAutoPedalNtt[]   = {0.0150, 0.0040, 0.0025, 0.075};
+    pidAutoPedalHdg[]   = {0.0250, 0.00125, 0.00625, 0.075}; //halved - yaw swung in the hover
+    pidAutoPedalNtt[]   = {0.0075, 0.0040, 0.0025, 0.075};  //kp halved - overshot into NTT
     pidAutoPedalAero[]  = {0.3000, 0.2500, 0.1000, 0.05};

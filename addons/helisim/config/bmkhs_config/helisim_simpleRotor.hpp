@@ -79,8 +79,8 @@
             coneAngle        = 12.0;  //deg at full collective
             flapBackRollMax  = 15.0;  //deg per unit advance ratio
             flapBackPitchMax =  9.0;  //deg per unit advance ratio
-            rollLiftCoef     = 0.166;
-            pitchLiftCoef    = 0.315;
+            rollLiftCoef     = 0.116;     //0.166 x0.7 - rates 30% high
+            pitchLiftCoef    = 0.188;     //0.315 x0.7 x0.85
             gndEffValue      = 1.225;
             reacTqScalar     = 0.50;
             autoTorque       = 80.0;
