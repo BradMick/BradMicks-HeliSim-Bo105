@@ -4,7 +4,7 @@
 
 | mod | why |
 |---|---|
-| BradMick's HeliSim 1.2.0.0 or later | the flight model this pack drives |
+| BradMick's HeliSim 1.4.0.0 or later | the flight model this pack drives; 1.4.0.0 is what reads this pack's rotor and flight-control config |
 | Global Mobilization - Cold War Germany | the Bo 105 itself (`gm_vehicles_air_helicopters_bo105`) |
 | CBA_A3 | HeliSim's dependency |
 
