@@ -16,22 +16,22 @@
     class FMC {
         class Sas {
             gate[]      = {};
-            pitch[]     = {0.0044, 0.0000, 0.000060, 0.00};    //pitch x1.7, roll x1.4 - restore after the lift coef cuts
-            roll[]      = {0.0024, 0.0000, 0.000049, 0.00};
+            pitch[]     = {0.0022, 0.0000, 0.000030, 0.00};
+            roll[]      = {0.0012, 0.0000, 0.0000245, 0.00};
             yaw[]       = {0.0026, 0.00044, 0.00010, 0.001276};
         };
         class AttitudeHold {
             gate[]      = {};
             subModes[]  = {"pos", "vel", "att"};
-            posPitch[]  = {0.131, 0.0061, 0.105, 0.1};     //position / velocity hold
-            posRoll[]   = {0.039, 0.0050, 0.064, 0.1};
-            attPitch[]  = {0.157, 0.0043, 0.0765, 0.1};
-            attRoll[]   = {0.056, 0.0021, 0.0252, 0.1};
+            posPitch[]  = {0.0655, 0.00305, 0.0525, 0.1};  //position / velocity hold
+            posRoll[]   = {0.0195, 0.0025, 0.032, 0.1};
+            attPitch[]  = {0.0785, 0.00215, 0.03825, 0.1};
+            attRoll[]   = {0.028, 0.00105, 0.0126, 0.1};
         };
         class AltitudeHold {
             gate[]      = {};
             rad[]       = {0.015, 0.00003, 0.0015, 0.05};
-            bar[]       = {0.0003, 0.0000, 0.00024, 0.00};
+            bar[]       = {0.015, 0.00003, 0.0015, 0.05};
         };
         class HeadingHold {
             gate[]      = {};
