@@ -60,24 +60,28 @@
                 };
 
                 //Compressor map - compressor_map.py: MCP 15 C 0.950 779 0.86, TOP 15 C 0.968 810 0.95.
+                //Rows below the first fitted row rebuilt by compressor_map.py (Core 1.4.2.0) - the turbine
+                //takes its share of each row's own pressure ratio, so the rotor turns during a start.
                 compressorMap[] = {
-                     {0.0000, 0.0588, 0.0000, 0.544, 0.2924}
-                    ,{0.0500, 0.0595, 0.0116, 0.544, 0.2924}
-                    ,{0.1000, 0.0618, 0.0329, 0.544, 0.2924}
-                    ,{0.1500, 0.0656, 0.0604, 0.544, 0.2924}
-                    ,{0.2000, 0.0712, 0.0930, 0.544, 0.2924}
-                    ,{0.2500, 0.0789, 0.1300, 0.544, 0.2924}
-                    ,{0.3000, 0.0891, 0.1709, 0.544, 0.2924}
-                    ,{0.3500, 0.1024, 0.2153, 0.544, 0.2924}
-                    ,{0.4000, 0.1194, 0.2631, 0.544, 0.2924}
-                    ,{0.4500, 0.1410, 0.3139, 0.544, 0.2924}
-                    ,{0.5000, 0.1683, 0.3676, 0.544, 0.2924}
-                    ,{0.5500, 0.2026, 0.4241, 0.544, 0.2924}
-                    ,{0.6000, 0.2456, 0.4833, 0.544, 0.2924}
-                    ,{0.6173, 0.2629, 0.5043, 0.544, 0.2924}
-                    ,{0.6768, 0.3329, 0.5891, 0.595, 0.3459}
-                    ,{0.7546, 0.4559, 0.7130, 0.642, 0.4067}
-                    ,{0.8125, 0.5971, 0.8152, 0.657, 0.4649}
+                    {0.0000, 0.1389, 0.0000, 0.544, 0.0000}
+                    ,{0.0500, 0.1400, 0.0116, 0.544, 0.0037}
+                    ,{0.1000, 0.1437, 0.0329, 0.544, 0.0158}
+                    ,{0.1500, 0.1499, 0.0604, 0.544, 0.0348}
+                    ,{0.2000, 0.1587, 0.0930, 0.544, 0.0610}
+                    ,{0.2500, 0.1704, 0.1300, 0.544, 0.0938}
+                    ,{0.3000, 0.1855, 0.1709, 0.544, 0.1326}
+                    ,{0.3500, 0.2044, 0.2153, 0.544, 0.1770}
+                    ,{0.4000, 0.2275, 0.2631, 0.544, 0.2261}
+                    ,{0.4500, 0.2554, 0.3139, 0.544, 0.2792}
+                    ,{0.5000, 0.2889, 0.3676, 0.544, 0.3357}
+                    ,{0.5500, 0.3288, 0.4241, 0.544, 0.3949}
+                    ,{0.6000, 0.3760, 0.4833, 0.544, 0.4564}
+                    ,{0.6173, 0.3942, 0.5043, 0.544, 0.4781}
+                    ,{0.6768, 0.4647, 0.5891, 0.595, 0.4779}
+                    ,{0.7546, 0.5785, 0.7130, 0.642, 0.4882}
+                    ,{0.8125, 0.6982, 0.8152, 0.657, 0.5148}
+                    ,{0.8369, 0.7671, 0.8609, 0.654, 0.5372}
+                    ,{0.8592, 0.8344, 0.9043, 0.656, 0.5534}
                     ,{0.8636, 0.7925, 0.9502, 0.655, 0.4997}
                     ,{0.8800, 0.8694, 0.9595, 0.650, 0.5201}
                     ,{0.9167, 1.0306, 0.9804, 0.653, 0.5658}
@@ -129,11 +133,11 @@
             //The ECU - what it schedules, and the ceilings it will not pass.
             class Governor {
                 //Minimum fuel the power lever schedules.
-                fuelIdle = 0.521;        //settles Ng at 0.679
+                fuelIdle = 0.533;        //settles Ng at 0.679
                 fuelFly  = 3.136;        //WIDE OPEN - the governor cuts back from here
 
                 //Fuel metered at light-off as a fraction of idle fuel. Sets the start PEAK.
-                startFuelBase = 0.50;
+                startFuelBase = 0.06;    //start mirrors the AH-64D: lever IDLE at 7 s, 52% in ~20-25 s, peak ~620-660 C
 
                 ffwdGain = 1.00;         //collective anticipation - the load demand spindle
 
@@ -150,8 +154,8 @@
             //No systems are modelled here, so nothing gates it.
             class Starter {
                 type   = "pneumatic";
-                torque    = 0.45;               //stalled, on the spool, normalised
-                runawayNg = 0.25;               //no torque left - where motoring settles
+                torque    = 0.45;               //maximum, on the spool, normalised - then power-limited
+                motoringNg = 0.25;              //starter alone, no fuel
                 gate[] = {};
             };
         };

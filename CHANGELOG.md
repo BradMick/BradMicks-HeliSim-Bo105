@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.1.0
+
+**Requires HeliSim Core 1.4.2.0.**
+
+- Engine starts on Core 1.4.2.0: the starter's `runawayNg` is now `motoringNg` (dry crank 25%).
+- The compressor map's rows below the fitted ratings rebuilt, so the rotor turns as Ng rises;
+  idle fuel re-solved, idle unchanged.
+- Start fuel set so the start runs like the AH-64D's: lever to IDLE, self-sustaining in about
+  20-25 s, peak TGT about 620-660 C.
+
 ## 1.1.0.0
 
 **Requires HeliSim Core 1.4.0.**
